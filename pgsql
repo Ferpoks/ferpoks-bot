@@ -1,0 +1,11 @@
+index.html
+privacy.html
+terms.html
+support.html
+data-deletion.html
+package.json
+netlify.toml
+netlify/functions/_lib/send.js
+netlify/functions/_lib/ai.js
+netlify/functions/salla-webhook.js
+netlify/functions/wa-inbound.js
