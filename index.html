@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>واتس بوت فيربوكس — إشعارات واتساب وذكاء اصطناعي لمتاجر سلة</title>
+<meta name="description" content="بوت واتساب احترافي لمتاجر سلة: إشعارات الطلبات، ردود ذكية بالعربي، تذكير عربات متروكة، سجل رسائل، وأمان مفاتيح.">
+<meta name="theme-color" content="#c8a97e">
+<style>
+:root{
+  /* ألوان كلاسيك (أبيض × بني فاتح) */
+  --bg:#ffffff;            /* خلفية عامة */
+  --bg-soft:#f7f4f1;       /* خلفية خفيفة للأقسام */
+  --text:#2b2118;          /* نص أساسي (بني غامق) */
+  --muted:#6b5e52;         /* نص خافت */
+  --primary:#c8a97e;       /* بني فاتح (أساسي) */
+  --primary-600:#b88f6b;   /* درجة أغمق للأزرار/الحدود */
+  --border:#e9e2db;        /* حدود أنيقة */
+  --ok:#2e7d32;            /* نجاح */
+  --danger:#b00020;        /* خطأ */
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:system-ui,"Segoe UI","Tahoma",Arial; background:var(--bg); color:var(--text); line-height:1.7}
+a{color:#7b5a33;text-decoration:none}
+.container{max-width:1100px;margin:auto;padding:0 20px}
+
+/* NAV */
+.nav{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);z-index:30}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:36px;height:36px;border-radius:8px;background:var(--primary);display:grid;place-items:center;color:#fff;font-weight:900}
+.nav-links{display:flex;gap:18px;align-items:center}
+.btn{display:inline-block;padding:10px 16px;border-radius:10px;border:1px solid var(--primary-600);background:var(--primary);color:#fff;font-weight:700}
+.btn.ghost{background:transparent;color:#7b5a33}
+
+/* HERO */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--border)}
+.hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px}
+.h1{font-size:40px;line-height:1.2;margin:0 0 12px}
+.lead{color:var(--muted);font-size:18px;margin:0 0 18px}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 26px}
+.badge{border:1px solid var(--border);color:#614e3d;background:#fff;padding:6px 10px;border-radius:9999px;font-size:13px}
+.hero-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+
+/* SECTION HEADERS */
+.section{padding:56px 0}
+.sec-title{font-size:28px;margin:0 0 8px}
+.sec-sub{color:var(--muted);margin:0 0 22px}
+
+/* FEATURES */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+.card h3{margin:8px 0}
+.small{color:var(--muted);font-size:14px}
+
+/* HOW */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step{background:var(--bg-soft);border:1px solid var(--border);border-radius:14px;padding:18px}
+.step .num{width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:10px}
+
+/* INTEGRATIONS TABLE */
+.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.table th,.table td{padding:12px;border-bottom:1px solid var(--border);text-align:right}
+.table th{background:var(--bg-soft);font-weight:700}
+
+/* PRICING */
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.price{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;position:relative}
+.price .tag{position:absolute;top:12px;left:12px;background:#7b5a33;color:#fff;border-radius:999px;padding:4px 10px;font-size:12px}
+.big{font-size:34px;font-weight:900}
+.check{color:var(--ok);font-weight:700;margin-inline:6px}
+.x{color:var(--danger);font-weight:700;margin-inline:6px}
+
+/* FAQ */
+.faq{display:grid;gap:10px}
+.faq-item{background:#fff;border:1px solid var(--border);border-radius:12px}
+.faq-q{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-a{padding:0 16px 16px;display:none;color:var(--muted)}
+
+/* CTA */
+.cta{background:var(--bg-soft);border:1px solid var(--border);border-radius:16px;padding:22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+
+/* FOOTER */
+.footer{padding:28px 0;border-top:1px solid var(--border);color:#7a6a59}
+.footer a{color:#7a6a59}
+
+/* Responsive */
+@media (max-width: 900px){
+  .hero .grid{grid-template-columns:1fr}
+  .grid-3,.steps,.pricing{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="brand">
+      <div class="logo">W</div>
+      <strong>واتس بوت فيربوكس</strong>
+    </div>
+    <div class="nav-links">
+      <a href="#features">المزايا</a>
+      <a href="#how">طريقة العمل</a>
+      <a href="#integrations">التكاملات</a>
+      <a href="#pricing">الأسعار</a>
+      <a href="#faq">الأسئلة</a>
+      <a class="btn" href="#start">ابدأ الآن</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero container">
+  <div class="grid">
+    <div>
+      <h1 class="h1">بوت واتساب كلاسيكي أنيق<br> لإشعارات الطلبات والردود الذكية</h1>
+      <p class="lead">مصمم لمتاجر <b>سلة</b>: إشعارات الطلب، تذكير الدفع، تحديث الشحن، + ردود ذكية بالعربي للأسئلة الشائعة، مع سجل رسائل وتتبّع.</p>
+      <div class="badges">
+        <span class="badge">واجهة كلاسيك</span>
+        <span class="badge">تخصيص قوالب</span>
+        <span class="badge">حماية المفاتيح</span>
+        <span class="badge">متوافق مع سياسات واتساب</span>
+      </div>
+      <a class="btn" href="#start">جرّبه الآن</a>
+      <a class="btn ghost" href="privacy.html">سياسة الخصوصية</a>
+    </div>
+    <div class="hero-card">
+      <h3>ملخص سريع للبوت</h3>
+      <ul class="small">
+        <li>إشعارات: إنشاء الطلب، الدفع، الإلغاء، الشحن، التسليم، المرتجع، تذكير الدفع عند الاستلام.</li>
+        <li>ردود ذكية بالعربي (AI): ساعات العمل، سياسات الاستبدال، التوصيل، تتبّع الطلب، المنتجات الأكثر شيوعًا.</li>
+        <li>التذكير بالعربات المتروكة (Abandoned Cart) للعميل.</li>
+        <li>سجل رسائل + بحث وتصفية، وتصدير CSV.</li>
+        <li>لوحة مفاتيح آمنة (إخفاء مفاتيح واتساب/السيرفر).</li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- FEATURES -->
+<section id="features" class="section container">
+  <h2 class="sec-title">المزايا الأساسية</h2>
+  <p class="sec-sub">تفاصيل شاملة لكل ما يقدمه البوت.</p>
+  <div class="grid-3">
+    <div class="card">
+      <h3>الإشعارات الذكية</h3>
+      <p class="small">رسائل فورية للعميل مع متغيّرات ديناميكية: رقم الطلب، المبلغ، حالة الشحن، رابط التتبع.</p>
+    </div>
+    <div class="card">
+      <h3>ردود AI بالعربي</h3>
+      <p class="small">قوالب قابلة للتخصيص + اكتشاف نية السؤال (الترجيع/الدفع/الشحن) مع fallback لموظف الدعم.</p>
+    </div>
+    <div class="card">
+      <h3>تذكير العربات</h3>
+      <p class="small">يتعرف على العربات المتروكة ويرسل تذكيرًا أنيقًا مع رابط الإكمال وكود خصم اختياري.</p>
+    </div>
+    <div class="card">
+      <h3>سجل وتتبّع</h3>
+      <p class="small">عرض حالة الإرسال/الفشل، عدد المحاولات، ووقت الإرسال، مع تصدير CSV لتحليل الأداء.</p>
+    </div>
+    <div class="card">
+      <h3>أمان مفاتيح</h3>
+      <p class="small">تخزين مشفّر للمفاتيح و Webhook secret، مع أدوار وصول (مالك/مشرف/دعم).</p>
+    </div>
+    <div class="card">
+      <h3>تركيب بسيط</h3>
+      <p class="small">العمل بدون إدارة سيرفر. ربط عبر Webhook وإدخال مفاتيح واتساب فقط.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" class="section container" style="background:var(--bg-soft);border:1px solid var(--border);border-radius:14px">
+  <h2 class="sec-title">طريقة العمل</h2>
+  <p class="sec-sub">٣ خطوات وتبدأ.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <h3>تركيب من سلة</h3>
+      <p class="small">ثبّت التطبيق وامنح الأذونات المطلوبة لقراءة حالة الطلب.</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <h3>إعداد الويبهوك</h3>
+      <p class="small">الصق رابط الويبهوك في إعدادات التطبيق، ثم فعّل عمليات الإشعار التي تريدها.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <h3>إدخال مفاتيح واتساب</h3>
+      <p class="small">أدخل مفتاح WhatsApp Cloud أو Twilio + أرقام الإرسال، واختر قوالب الرسائل.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<section id="integrations" class="section container">
+  <h2 class="sec-title">التكاملات المدعومة</h2>
+  <p class="sec-sub">التكامل مع مزودي واتساب وقوالب الرسائل.</p>
+  <table class="table">
+    <thead>
+      <tr><th>المزوّد</th><th>الحالة</th><th>الملاحظات</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>WhatsApp Cloud API</td><td>مدعوم</td><td>أفضل خيار رسمي؛ يلزم تفعيل القوالب وجهة الإرسال.</td></tr>
+      <tr><td>Twilio WhatsApp</td><td>مدعوم</td><td>سهل البدء؛ يدعم Sandbox للتجارب السريعة.</td></tr>
+      <tr><td>مزود محلي</td><td>تجريبي</td><td>متوفر عند الطلب وفق التوفر الإقليمي.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="section container">
+  <h2 class="sec-title">خطط الأسعار</h2>
+  <p class="sec-sub">تكاليف رسائل واتساب تُحسب على المزوّد (خارج الاشتراك).</p>
+  <div class="pricing">
+    <!-- Basic -->
+    <div class="price">
+      <div class="big">10$</div>
+      <div class="small">شهريًا — أساسي</div>
+      <ul class="small">
+        <li><span class="check">✔</span>إشعارات: إنشاء/دفع/إلغاء</li>
+        <li><span class="check">✔</span>قالب رد ذكي واحد</li>
+        <li><span class="check">✔</span>سجل رسائل 30 يوم</li>
+        <li><span class="x">✖</span>عربات متروكة</li>
+        <li><span class="x">✖</span>تصدير CSV</li>
+        <li><span class="x">✖</span>أدوار وصول</li>
+      </ul>
+      <p><a class="btn" href="#start">اختر الخطة</a></p>
+    </div>
+    <!-- Pro -->
+    <div class="price">
+      <div class="tag">الأكثر شعبية</div>
+      <div class="big">20$</div>
+      <div class="small">شهريًا — متقدم</div>
+      <ul class="small">
+        <li><span class="check">✔</span>كل إشعارات الطلب والشحن</li>
+        <li><span class="check">✔</span>3 قوالب رد ذكي + ساعات عمل</li>
+        <li><span class="check">✔</span>عربات متروكة</li>
+        <li><span class="check">✔</span>سجل رسائل 90 يوم</li>
+        <li><span class="check">✔</span>تصدير CSV</li>
+        <li><span class="x">✖</span>أدوار وصول</li>
+      </ul>
+      <p><a class="btn" href="#start">اختر الخطة</a></p>
+    </div>
+    <!-- Business -->
+    <div class="price">
+      <div class="big">30$</div>
+      <div class="small">شهريًا — محترف</div>
+      <ul class="small">
+        <li><span class="check">✔</span>كل الإشعارات + تخصيص القوالب</li>
+        <li><span class="check">✔</span>قوالب غير محدودة + نية السؤال</li>
+        <li><span class="check">✔</span>أدوار وصول (مالك/مشرف/دعم)</li>
+        <li><span class="check">✔</span>سجل رسائل 180 يوم</li>
+        <li><span class="check">✔</span>دعم أولوية وتوليد تقارير</li>
+      </ul>
+      <p><a class="btn" href="#start">اختر الخطة</a></p>
+    </div>
+  </div>
+  <p class="small" style="margin-top:10px;color:var(--muted)">ملاحظة: قد تتطلب قوالب واتساب موافقة مسبقة حسب سياسة المزوّد.</p>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section container">
+  <h2 class="sec-title">أسئلة متكررة</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q"><strong>هل أحتاج سيرفر لإدارة البوت؟</strong><span>＋</span></div>
+      <div class="faq-a">لا. يعمل عبر Webhook ومزوّد واتساب. لا إدارة سيرفر مطلوبة منك.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><strong>هل يدعم العربية بالكامل؟</strong><span>＋</span></div>
+      <div class="faq-a">نعم، الرسائل والقوالب والعناوين كلها بالعربي، مع دعم التخصيص.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><strong>ما الفرق بين الخطط؟</strong><span>＋</span></div>
+      <div class="faq-a">الخطط الأعلى تضيف قوالب أكثر، تتبع أعمق، مدة سجل أطول، وأدوار وصول ودعم أولوية.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><strong>مَن يتحمل تكلفة رسائل واتساب؟</strong><span>＋</span></div>
+      <div class="faq-a">التكلفة تُحسب على مزوّد واتساب (Cloud أو Twilio) وليس ضمن الاشتراك.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="start" class="section container">
+  <div class="cta">
+    <div>
+      <h3>جاهز للانطلاق؟</h3>
+      <p>ركّب التطبيق من متجر سلة، وأدخل مفاتيح واتساب، وابدأ إرسال الإشعارات لعملائك اليوم.</p>
+    </div>
+    <a class="btn" href="#">ابدأ التجربة</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container" style="display:flex;gap:18px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+    <div>© <span id="y"></span> واتس بوت فيربوكس</div>
+    <div style="display:flex;gap:14px">
+      <a href="privacy.html">الخصوصية</a>
+      <a href="terms.html">الشروط</a>
+      <a href="support.html">الدعم</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// FAQ toggle
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click', ()=>{
+    const a = q.nextElementSibling;
+    const open = a.style.display === 'block';
+    document.querySelectorAll('.faq-a').forEach(x=>x.style.display='none');
+    document.querySelectorAll('.faq-q span').forEach(s=>s.textContent='＋');
+    a.style.display = open ? 'none':'block';
+    q.querySelector('span').textContent = open ? '＋' : '－';
+  });
+});
+document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
